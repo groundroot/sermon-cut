@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- Thumbnail style A "Bold": full-bleed photo, dark gradient from the left, very large title, one warm highlight word.
+     Filled by sermon_cut.py thumbset ({{…}} placeholders, *word* = highlight). 1280×720. -->
+<html lang="ko"><head><meta charset="utf-8">
+<style>
+  html, body { margin: 0; width: 1280px; height: 720px; overflow: hidden; background: #0b1020; }
+  .photo { position: absolute; top: 0; right: 0; width: 62%; height: 100%; object-fit: cover;
+           object-position: {{fx}}% {{fy}}%; transform: scale(1.08); transform-origin: {{fx}}% {{fy}}%; }
+  .shade { position: absolute; inset: 0;
+           background: linear-gradient(90deg, rgba(8,12,28,1) 0%, rgba(8,12,28,1) 38%, rgba(8,12,28,.55) 48%, rgba(8,12,28,0) 62%),
+                       linear-gradient(0deg, rgba(8,12,28,.7) 0%, rgba(8,12,28,0) 30%); }
+  .text { position: absolute; left: 64px; top: 0; bottom: 0; width: 640px; display: flex; flex-direction: column;
+          justify-content: center; font-family: "Pretendard", sans-serif; color: #fff; }
+  .eyebrow { font-weight: 700; font-size: 26px; letter-spacing: .04em; color: #ffcf6e; margin-bottom: 22px; }
+  h1 { width: 100%;  margin: 0; font-weight: 900; font-size: 84px; line-height: 1.12; letter-spacing: -.035em; word-break: keep-all;
+       text-shadow: 0 4px 24px rgba(0,0,0,.45); }
+  h1 em { font-style: normal; color: #ffb547; }
+  .meta { margin-top: 30px; font-weight: 600; font-size: 28px; color: rgba(255,255,255,.86); }
+  .meta b { font-weight: 800; color: #fff; }
+</style></head>
+<body>
+  <img class="photo" src="{{photo}}">
+  <div class="shade"></div>
+  <div class="text">
+    <div class="eyebrow">{{eyebrow}}</div>
+    <h1 data-fit><span class="l">{{line1}}</span><br><span class="l">{{line2}}</span></h1>
+    <div class="meta">{{scripture}} · <b>{{name}}</b></div>
+  </div>
+<script>
+/* each title line stays on one line; shrink the font until the widest line fits its box */
+for (const el of document.querySelectorAll("[data-fit]")) {
+  let size = parseFloat(getComputedStyle(el).fontSize);
+  const max = el.clientWidth;
+  for (const line of el.querySelectorAll(".l")) line.style.whiteSpace = "nowrap";
+  const widest = () => Math.max(...[...el.querySelectorAll(".l")].map(l => l.getBoundingClientRect().width));
+  while (widest() > max && size > 28) { size -= 2; el.style.fontSize = size + "px"; }
+}
+</script>
+</body></html>

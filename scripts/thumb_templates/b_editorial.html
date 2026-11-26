@@ -1,0 +1,40 @@
+<!doctype html>
+<!-- Thumbnail style B "Editorial": warm paper panel on the left with a serif title, photo panel on the right.
+     Filled by sermon_cut.py thumbset ({{…}} placeholders, *word* = highlight). 1280×720. -->
+<html lang="ko"><head><meta charset="utf-8">
+<style>
+  html, body { margin: 0; width: 1280px; height: 720px; overflow: hidden; background: #f4ede1; }
+  .photo { position: absolute; right: 0; top: 0; width: 600px; height: 720px; object-fit: cover;
+           object-position: {{fx}}% {{fy}}%; }
+  .edge { position: absolute; right: 600px; top: 0; width: 10px; height: 720px; background: #b3261e; }
+  .text { position: absolute; left: 70px; top: 0; bottom: 0; width: 560px; display: flex; flex-direction: column;
+          justify-content: center; color: #1d1a16; }
+  .eyebrow { font-family: "Pretendard", sans-serif; font-weight: 700; font-size: 24px; letter-spacing: .08em;
+             color: #b3261e; margin-bottom: 26px; }
+  h1 { width: 100%;  margin: 0; font-family: "Nanum Myeongjo", serif; font-weight: 800; font-size: 66px; line-height: 1.22;
+       letter-spacing: -.03em; word-break: keep-all; }
+  h1 em { font-style: normal; color: #b3261e; }
+  .rule { width: 72px; height: 3px; background: #1d1a16; margin: 34px 0 22px; }
+  .meta { font-family: "Pretendard", sans-serif; font-weight: 600; font-size: 26px; color: #4a443b; line-height: 1.5; }
+  .meta b { color: #1d1a16; font-weight: 800; }
+</style></head>
+<body>
+  <img class="photo" src="{{photo}}">
+  <div class="edge"></div>
+  <div class="text">
+    <div class="eyebrow">{{eyebrow}}</div>
+    <h1 data-fit><span class="l">{{line1}}</span><br><span class="l">{{line2}}</span></h1>
+    <div class="rule"></div>
+    <div class="meta"><b>{{name}}</b><br>{{scripture}}</div>
+  </div>
+<script>
+/* each title line stays on one line; shrink the font until the widest line fits its box */
+for (const el of document.querySelectorAll("[data-fit]")) {
+  let size = parseFloat(getComputedStyle(el).fontSize);
+  const max = el.clientWidth;
+  for (const line of el.querySelectorAll(".l")) line.style.whiteSpace = "nowrap";
+  const widest = () => Math.max(...[...el.querySelectorAll(".l")].map(l => l.getBoundingClientRect().width));
+  while (widest() > max && size > 28) { size -= 2; el.style.fontSize = size + "px"; }
+}
+</script>
+</body></html>
